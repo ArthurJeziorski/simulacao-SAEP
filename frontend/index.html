@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskManager</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+</head>
+<body data-bs-theme="dark">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-dark bg-dark px-3 mb-4">
+  <span class="navbar-brand fw-bold"><i class=""></i>Quadro De Tarefas</span>
+  <div class="d-flex gap-1">
+    <button class="btn btn-sm btn-outline-light" onclick="showPage('quadro')">Quadro</button>
+    <button class="btn btn-sm btn-outline-light" onclick="showPage('nova')">+ Tarefa</button>
+    <button class="btn btn-sm btn-outline-light" onclick="showPage('usuarios')">Usuários</button>
+  </div>
+</nav>
+
+<!-- QUADRO -->
+<div id="page-quadro" class="container-fluid px-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0"><i class=""></i>TAREFAS</h5>
+    <button class="" onclick="showPage('nova')"><i class=""></i>Nova Tarefa</button>
+  </div>
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header bg-dark text-white d-flex justify-content-between">
+          <span><i class="bi bi-circle me-1"></i>Tem Que Fazer</span>
+          <span class="badge bg-light text-danger" id="cnt-a_fazer">0</span>
+        </div>
+        <div class="card-body p-2" id="col-a_fazer" style="min-height:80px"></div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header bg-dark text-white d-flex justify-content-between">
+          <span><i class="bi bi-arrow-repeat me-1"></i>Fazendo</span>
+          <span class="badge bg-light text-warning" id="cnt-fazendo">0</span>
+        </div>
+        <div class="card-body p-2" id="col-fazendo" style="min-height:80px"></div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header bg-dark text-white d-flex justify-content-between">
+          <span><i class="bi bi-check-circle me-1"></i>Pronto</span>
+          <span class="badge bg-light text-success" id="cnt-pronto">0</span>
+        </div>
+        <div class="card-body p-2" id="col-pronto" style="min-height:80px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOVA TAREFA -->
+<div id="page-nova" class="container d-none">
+  <h5 class="mb-3"><i class=""></i>Nova Tarefa</h5>
+  <div class="card" style="max-width:500px">
+    <div class="card-body">
+      <form id="formTarefa">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Nome do usuário</label>
+          <select id="nt-usuario" class="form-select" required>
+            <option value=""></option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Descrição</label>
+          <textarea id="nt-descricao" class="form-control" rows="3" placeholder="" required></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Setor</label>
+          <input type="text" id="nt-setor" class="form-control" placeholder="" required>
+        </div>
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Prioridade</label>
+          <select id="nt-prioridade" class="form-select" required>
+            <option value=""></option>
+            <option value="baixa">🟢 Baixa</option>
+            <option value="media">🟡 Média</option>
+            <option value="alta">🔴 Alta</option>
+          </select>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="">Cadastrar</button>
+          
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- USUÁRIOS -->
+<div id="page-usuarios" class="container d-none">
+  <h5 class="mb-3"><i class=""></i>Usuários</h5>
+  <div class="row g-3 align-items-start">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">Novo Usuário</h6>
+          <form id="formUsuario">
+            <div class="mb-3">
+              <label class="form-label">Nome</label>
+              <input type="text" id="u-nome" class="form-control" placeholder="" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">E-mail</label>
+              <input type="email" id="u-email" class="form-control" placeholder="" required>
+            </div>
+            <button type="submit" class="">Cadastrar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body p-0">
+          <table class="table table-hover mb-0">
+            <thead class="table-dark">
+              <tr><th>#</th><th>Nome</th><th>E-mail</th></tr>
+            </thead>
+            <tbody id="tbUsuarios">
+              <tr><td colspan="3" class="text-center text-muted py-3"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIÇÃO -->
+<div class="modal fade" id="modalEdicao" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Editar Tarefa</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="formEdicao">
+        <div class="modal-body">
+          <input type="hidden" id="e-id">
+          <div class="mb-3">
+            <label class="form-label">Usuário</label>
+            <select id="e-usuario" class="form-select" required></select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Descrição</label>
+            <textarea id="e-descricao" class="form-control" rows="3" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Setor</label>
+            <input type="text" id="e-setor" class="form-control" required>
+          </div>
+          <div class="row g-2">
+            <div class="col-6">
+              <label class="form-label">Prioridade</label>
+              <select id="e-prioridade" class="form-select" required>
+                <option value="baixa">🟢 Baixa</option>
+                <option value="media">🟡 Média</option>
+                <option value="alta">🔴 Alta</option>
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Status</label>
+              <select id="e-status" class="form-select" required>
+                <option value="a_fazer">A Fazer</option>
+                <option value="fazendo">Fazendo</option>
+                <option value="pronto">Pronto</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMAÇÃO -->
+<div class="modal fade" id="modalConfirm" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle me-1"></i>Excluir</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-1">Remover a tarefa:</p>
+        <p class="fw-semibold" id="confirm-desc"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger btn-sm" id="btnDel"><i class="bi bi-trash me-1"></i>Remover</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const API = 'http://localhost:3000/api';
+let tarefas = [];
+const LABELS = { a_fazer: 'A Fazer', fazendo: 'Fazendo', pronto: 'Pronto' };
+const PRIO = { baixa: 'Baixa', media: 'Média', alta: 'Alta' };
+const PRIO_CLASS = { baixa: 'success', media: 'warning', alta: 'danger' };
+
+function showPage(name) {
+  ['quadro','nova','usuarios'].forEach(p =>
+    document.getElementById('page-' + p).classList.toggle('d-none', p !== name)
+  );
+  if (name === 'quadro') loadTarefas();
+  if (name === 'nova') loadSelect('nt-usuario');
+  if (name === 'usuarios') loadUsuariosPage();
+}
+
+function toast(msg, type = 'success') {
+  const el = document.createElement('div');
+  el.className = `alert alert-${type} position-fixed top-0 end-0 m-3`;
+  el.style.cssText = 'z-index:9999;min-width:240px';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function loadTarefas() {
+  try {
+    tarefas = await (await fetch(`${API}/tarefas`)).json();
+    renderKanban();
+  } catch { toast('Erro ao carregar tarefas', 'danger'); }
+}
+
+function renderKanban() {
+  ['a_fazer','fazendo','pronto'].forEach(status => {
+    const items = tarefas.filter(t => t.status === status);
+    document.getElementById('cnt-' + status).textContent = items.length;
+    const col = document.getElementById('col-' + status);
+    if (!items.length) {
+      col.innerHTML = '<p class="text-muted text-center small py-3 mb-0">Nenhuma tarefa</p>';
+      return;
+    }
+    col.innerHTML = items.map(t => `
+      <div class="card mb-2">
+        <div class="card-body p-2">
+          <div class="d-flex justify-content-between align-items-start mb-1">
+            <span class="badge bg-${PRIO_CLASS[t.prioridade]}">${PRIO[t.prioridade]}</span>
+            <small class="text-muted">${new Date(t.data_cadastro).toLocaleDateString('pt-BR')}</small>
+          </div>
+          <p class="mb-1 fw-semibold small">${esc(t.descricao)}</p>
+          <p class="mb-2 text-muted" style="font-size:.75rem">
+            <i class="bi bi-building"></i> ${esc(t.setor)} &middot;
+            <i class="bi bi-person"></i> ${esc(t.nome_usuario)}
+          </p>
+          <div class="d-flex justify-content-between align-items-center">
+            <select class="form-select form-select-sm w-auto" onchange="patchStatus(${t.id},this.value)">
+              ${Object.entries(LABELS).map(([v,l]) => `<option value="${v}" ${v===t.status?'selected':''}>${l}</option>`).join('')}
+            </select>
+            <div class="d-flex gap-1">
+              <button class="btn btn-outline-primary btn-sm" onclick="openEdit(${t.id})"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-outline-danger btn-sm" onclick="openDel(${t.id})"><i class="bi bi-trash"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>`).join('');
+  });
+}
+
+async function patchStatus(id, status) {
+  await fetch(`${API}/tarefas/${id}/status`, {
+    method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ status })
+  });
+  await loadTarefas();
+}
+
+async function openEdit(id) {
+  const t = tarefas.find(x => x.id === id);
+  if (!t) return;
+  const us = await (await fetch(`${API}/usuarios`)).json();
+  document.getElementById('e-id').value = t.id;
+  document.getElementById('e-descricao').value = t.descricao;
+  document.getElementById('e-setor').value = t.setor;
+  document.getElementById('e-prioridade').value = t.prioridade;
+  document.getElementById('e-status').value = t.status;
+  document.getElementById('e-usuario').innerHTML = us.map(u =>
+    `<option value="${u.id}" ${u.id===t.id_usuario?'selected':''}>${esc(u.nome)}</option>`).join('');
+  new bootstrap.Modal(document.getElementById('modalEdicao')).show();
+}
+
+document.getElementById('formEdicao').addEventListener('submit', async e => {
+  e.preventDefault();
+  const id = document.getElementById('e-id').value;
+  const r = await fetch(`${API}/tarefas/${id}`, {
+    method: 'PUT', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      id_usuario: +document.getElementById('e-usuario').value,
+      descricao: document.getElementById('e-descricao').value,
+      setor: document.getElementById('e-setor').value,
+      prioridade: document.getElementById('e-prioridade').value,
+      status: document.getElementById('e-status').value,
+    })
+  });
+  const d = await r.json();
+  if (r.ok) {
+    bootstrap.Modal.getInstance(document.getElementById('modalEdicao')).hide();
+    toast('Tarefa atualizada!');
+    await loadTarefas();
+  } else { toast(d.erro || 'Erro ao atualizar', 'danger'); }
+});
+
+let delId = null;
+function openDel(id) {
+  delId = id;
+  document.getElementById('confirm-desc').textContent = tarefas.find(t => t.id === id)?.descricao || '';
+  new bootstrap.Modal(document.getElementById('modalConfirm')).show();
+}
+document.getElementById('btnDel').addEventListener('click', async () => {
+  if (!delId) return;
+  const r = await fetch(`${API}/tarefas/${delId}`, { method: 'DELETE' });
+  bootstrap.Modal.getInstance(document.getElementById('modalConfirm')).hide();
+  toast(r.ok ? 'Tarefa removida!' : 'Erro ao remover', r.ok ? 'success' : 'danger');
+  delId = null;
+  await loadTarefas();
+});
+
+async function loadSelect(selId) {
+  const us = await (await fetch(`${API}/usuarios`)).json();
+  const sel = document.getElementById(selId);
+  sel.innerHTML = us.length
+    ? '<option value="">Selecione...</option>' + us.map(u => `<option value="${u.id}">${esc(u.nome)}</option>`).join('')
+    : '<option value="">Nenhum usuário cadastrado</option>';
+}
+
+document.getElementById('formTarefa').addEventListener('submit', async e => {
+  e.preventDefault();
+  const r = await fetch(`${API}/tarefas`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      id_usuario: +document.getElementById('nt-usuario').value,
+      descricao: document.getElementById('nt-descricao').value.trim(),
+      setor: document.getElementById('nt-setor').value.trim(),
+      prioridade: document.getElementById('nt-prioridade').value,
+    })
+  });
+  const d = await r.json();
+  if (r.ok) { toast('Tarefa cadastrada!'); e.target.reset(); await loadSelect('nt-usuario'); }
+  else { toast(d.erro || 'Erro ao cadastrar', 'danger'); }
+});
+
+async function loadUsuariosPage() {
+  const us = await (await fetch(`${API}/usuarios`)).json();
+  document.getElementById('tbUsuarios').innerHTML = us.length
+    ? us.map(u => `<tr><td>${u.id}</td><td>${esc(u.nome)}</td><td>${esc(u.email)}</td></tr>`).join('')
+    : '<tr><td colspan="3" class="text-center text-muted py-3">Nenhum usuário</td></tr>';
+}
+
+document.getElementById('formUsuario').addEventListener('submit', async e => {
+  e.preventDefault();
+  const r = await fetch(`${API}/usuarios`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ nome: document.getElementById('u-nome').value.trim(), email: document.getElementById('u-email').value.trim() })
+  });
+  const d = await r.json();
+  if (r.ok) { toast('Usuário cadastrado!'); e.target.reset(); await loadUsuariosPage(); }
+  else { toast(d.erro || 'Erro ao cadastrar', 'danger'); }
+});
+
+loadTarefas();
+</script>
+</body>
+</html>

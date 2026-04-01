@@ -1,0 +1,158 @@
+:root {
+  --primary: #4f46e5;
+  --primary-dark: #3730a3;
+  --col-afazer: #ef4444;
+  --col-fazendo: #f59e0b;
+  --col-pronto: #10b981;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+body {
+  background: #f1f5f9;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.navbar-brand span {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.kanban-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .kanban-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kanban-col {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+
+.kanban-col-header {
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.kanban-col-header.afazer {
+  background: var(--col-afazer);
+}
+.kanban-col-header.fazendo {
+  background: var(--col-fazendo);
+}
+.kanban-col-header.pronto {
+  background: var(--col-pronto);
+}
+
+.kanban-col-body {
+  padding: 0.75rem;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.task-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.75rem;
+  transition: box-shadow 0.15s;
+}
+
+.task-card:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.badge-prioridade {
+  font-size: 0.7rem;
+  padding: 0.2em 0.55em;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.badge-baixa {
+  background: #dcfce7;
+  color: #15803d;
+}
+.badge-media {
+  background: #fef9c3;
+  color: #a16207;
+}
+.badge-alta {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.task-desc {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0.35rem 0 0.2rem;
+  word-break: break-word;
+}
+
+.task-meta {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.task-actions {
+  gap: 0.35rem;
+}
+
+.task-card .btn-icon {
+  padding: 0.2rem 0.45rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.status-select {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  cursor: pointer;
+}
+
+.col-counter {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 0.05rem 0.5rem;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+.empty-col {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  padding: 1.5rem 0;
+}
+
+.page-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.form-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  padding: 2rem;
+  max-width: 560px;
+}
